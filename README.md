@@ -62,10 +62,10 @@ Tumor growth often follows mathematical models such as:
 
 This project explores simulation of tumor progression based on these models.
 
-## 📊 Simulation Results
+## Simulation Results
 
 
-## ▶️ How to Run
+## How to Run
 
 Clone the repository
 ```bash 
@@ -83,10 +83,10 @@ Run simulation
 python3 main.py
 ```
 
-## 📜 License
+## License
 MIT License
 
-## 👨‍💻 Contributors
+## Contributors
 - Vaibhav Ganeriwala
 - Mahera Sultana Shaik
 - Karthik Mudenahalli Ashoka
