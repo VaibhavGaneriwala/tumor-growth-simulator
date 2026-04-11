@@ -1,11 +1,10 @@
 pandas
+openpyxl
+numpy
+nibabel
 opencv-python
 scikit-learn
-numpy
 matplotlib
 plotly
-scipy
-Pillow
-openpyxl
-joblib
+streamlit
 pytest

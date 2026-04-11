@@ -1,17 +1,29 @@
-![Python](https://img.shields.io/badge/Python-3.14-blue)
+![Python](https://img.shields.io/badge/Python-3-blue)
 ![Status](https://img.shields.io/badge/Project-Active-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 # Tumor Growth Simulator
 
-A computational model that simulates tumor growth dynamics using medical imaging data and mathematical modeling.
+A web-based tool for exploring longitudinal brain MRI data and simulating tumor growth under different scenarios. Built with Streamlit on top of the Yale Brain Mets Longitudinal dataset.
 
 Developed as part of final project for AA551: Engineering Python
 
-## Overview
-This project simulates the progression of tumor growth using imaging data and mathematical models to understand tumor expansion over time.
+## What it does
 
-The simulator can help visualize tumor progression and analyze growth patterns.
+The Tumor Growth Simulator lets a user:
+1. **Browse patients** from the Yale clinical dataset (~1,430 patients,
+   ~11,884 imaging visits) and view each patient's longitudinal timeline.
+2. **Scroll through MRI slices** (axial, sagittal, coronal) of any visit
+   with optional CLAHE contrast enhancement and automatic tumor region
+   highlighting via Otsu thresholding + contour detection.
+3. **Simulate tumor growth** using three mathematical models (exponential,
+   linear, Gompertz) with interactive sliders for starting volume and
+   growth rate.
+4. **Run what-if scenarios** — compare a baseline trajectory against a
+   hypothetical treatment that starts on a chosen day and changes the
+   growth rate from that day forward.
+5. **View a dashboard** summary of the entire dataset and detailed reports
+   for individual patients.
 
 
 ## Dataset
@@ -57,7 +69,7 @@ Visualization
 Tumor growth often follows mathematical models such as:
 
 • Exponential growth  
-• Logistic growth  
+• Linear growth  
 • Gompertz growth model  
 
 This project explores simulation of tumor progression based on these models.
@@ -77,11 +89,14 @@ Install dependencies
 ```bash 
 pip3 install -r requirements.txt
 ```
+Download the Yale Brain Mets Longitudinal dataset and note the path
+   to its root folder (the one containing the `YG_*` patient subfolders).
 
 Run simulation
 ```bash 
-python3 main.py
+streamlit run main.py
 ```
+Streamlit will open a browser tab at `http://localhost:8501`.
 
 ## License
 MIT License
