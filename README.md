@@ -18,12 +18,14 @@ The Tumor Growth Simulator lets a user:
    highlighting via Otsu thresholding + contour detection.
 3. **Simulate tumor growth** using three mathematical models (exponential,
    linear, Gompertz) with interactive sliders for starting volume and
-   growth rate.
+   growth rate. An optional **ML-predicted growth rate** populates the
+   slider with a value estimated by a Random Forest trained on the cohort.
 4. **Run what-if scenarios** — compare a baseline trajectory against a
    hypothetical treatment that starts on a chosen day and changes the
    growth rate from that day forward.
 5. **View a dashboard** summary of the entire dataset and detailed reports
    for individual patients.
+6. **Export simulation results** as a CSV file for offline analysis.
 
 
 ## Dataset
@@ -91,6 +93,17 @@ pip3 install -r requirements.txt
 ```
 Download the Yale Brain Mets Longitudinal dataset and note the path
    to its root folder (the one containing the `YG_*` patient subfolders).
+
+Export PATHS
+The dataset builder reads the same TGS_FILE_PATH and TGS_NIFTI_ROOT
+environment variables used by the Streamlit app. Set them before running:
+
+```bash
+export TGS_FILE_PATH=/path/to/clinical_data.xlsx
+export TGS_NIFTI_ROOT=/path/to/nifti_root
+python run_dataset_build.py
+python train_growth_model.py
+```
 
 Run simulation
 ```bash 
