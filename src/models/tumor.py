@@ -56,13 +56,16 @@ class Tumor:
         """Fit an exponenetial model V = V0 * exp(k*t) to measurements and return growth rate k (per day)"""
         if self.num_measurements() < 2:
             return None
-        
-        _, volumes = self.get_timeseries()
-        if any(v <= 0 for v in volumes):
+
+        days_all = self.days_since_first()
+        _, volumes_all = self.get_timeseries()
+
+        valid = [(d, v) for d, v in zip(days_all, volumes_all) if v > 0]
+        if len(valid) < 2:
             return None
-        
-        days = self.days_since_first()
-        log_volumes = [math.log(v) for v in volumes]
+
+        days = [d for d, _ in valid]
+        log_volumes = [math.log(v) for _, v in valid]
 
         slope, _intercept = np.polyfit(days, log_volumes, 1)
         return float(slope)
