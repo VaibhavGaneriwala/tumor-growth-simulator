@@ -102,3 +102,30 @@ def process_slice_pipeline(slice_2d, threshold=180, threshold_mode="otsu", apply
         "num_regions": len(contours),
         "threshold_used": threshold_used,
     }
+
+def estimate_brain_mask(slice_2d_uint8, erosion_iterations=3):
+    """Estimate a rough brain mask for a single 2D MRI slice."""
+    _ret, tissue_mask = cv2.threshold(slice_2d_uint8, 10, 255, cv2.THRESH_BINARY)
+
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+    closed = cv2.morphologyEx(tissue_mask, cv2.MORPH_CLOSE, kernel)
+
+    num_labels, labels, stats, _centroids = cv2.connectedComponentsWithStats(closed, connectivity=8)
+    if num_labels <= 1:
+        return np.zeros_like(slice_2d_uint8, dtype=np.uint8)
+
+    largest_label = 1
+    largest_area = stats[1, cv2.CC_STAT_AREA]
+    for label_idx in range(2, num_labels):
+        area = stats[label_idx, cv2.CC_STAT_AREA]
+        if area > largest_area:
+            largest_area = area
+            largest_label = label_idx
+
+    brain_only = np.zeros_like(slice_2d_uint8, dtype=np.uint8)
+    brain_only[labels == largest_label] = 255
+
+    erode_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    brain_eroded = cv2.erode(brain_only, erode_kernel, iterations=erosion_iterations)
+
+    return brain_eroded
