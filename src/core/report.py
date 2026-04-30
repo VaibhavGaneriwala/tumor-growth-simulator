@@ -1,6 +1,8 @@
 # Author: Mahera Sultana Shaik
 # Description: Generates plain-text summary reports for patients.
 
+import math
+
 def _format_date(dt):
     """Format a datetime as a short date string"""
     if dt is None:
@@ -40,7 +42,7 @@ def build_patient_summary(patient, tumor=None):
         if k is None:
             lines.append("  Growth rate: not enough data")
         else:
-            percent_per_month = (2.71828 ** (k * 30) - 1) * 100
+            percent_per_month = (math.e ** (k * 30) - 1) * 100
             lines.append(
                 f"  Growth rate k: {k:.5f} / day "
                 f"(~{percent_per_month:+.1f}% per month)"
