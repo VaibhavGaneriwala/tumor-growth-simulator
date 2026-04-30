@@ -12,6 +12,23 @@ def cached_load_patients(file_path):
     patients, summary = load_patients_from_excel(filepath=file_path)
     return patients, summary
 
+def _is_safe_path(path):
+    """Return True if path has no traversal segments and points to an expected file type."""
+    if not path:
+        return False
+    norm = os.path.normpath(path)
+    if ".." in norm.split(os.sep):
+        return False
+    return True
+
+def _validate_excel_path(path):
+    """Return an error string if path is not a valid Excel file path, else None."""
+    if not _is_safe_path(path):
+        return "Path contains '..' segments — please use an absolute path."
+    if not path.lower().endswith((".xlsx", ".xls")):
+        return "File must be an Excel file (.xlsx or .xls)."
+    return None
+
 def render_sidebar():
     """Renders the sidebar with file upload and summary display."""
     st.sidebar.header("Datatset")
@@ -20,6 +37,17 @@ def render_sidebar():
     default_nifti_root = st.session_state.get("nifti_root", os.environ.get("TGS_NIFTI_ROOT", ""))
     file_path = st.sidebar.text_input("Clinical Excel file", value=default_file_path, help="Enter the path to the clinical Excel file.")
     nifti_root = st.sidebar.text_input("NIfTI root folder", value=default_nifti_root, help="Enter the path to the NIfTI root folder.")
+
+    if file_path:
+        err = _validate_excel_path(file_path)
+        if err:
+            st.sidebar.error(err)
+            file_path = ""
+
+    if nifti_root and not _is_safe_path(nifti_root):
+        st.sidebar.error("NIfTI path contains '..' segments — please use an absolute path.")
+        nifti_root = ""
+
     st.session_state["file_path"] = file_path
     st.session_state["nifti_root"] = nifti_root
     return file_path, nifti_root
